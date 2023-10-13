@@ -1,0 +1,14 @@
+includes:
+    - vendor/contributte/phpstan/phpstan.neon
+
+parameters:
+    level: 0
+    phpVersion: 80200
+    scanDirectories:
+        - src
+        - app
+    fileExtensions:
+        - php
+    paths:
+        - src
+        - app

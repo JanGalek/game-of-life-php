@@ -1,0 +1,19 @@
+{
+  "world": {
+    "dimension": 40,
+    "speciesCount": 1,
+    "iterationsCount": 2
+  },
+  "organisms": [
+    {
+      "pos_x": 19,
+      "pos_y": 19,
+      "species": "Human"
+    },
+    {
+      "pos_x": 20,
+      "pos_y": 19,
+      "species": "Human"
+    }
+  ]
+}
