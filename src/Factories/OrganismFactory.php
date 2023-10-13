@@ -1,18 +1,24 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace GameOfLife\Factories;
 
-use GameOfLife\Species;
+use GameOfLife\Model\Organisms;
+use GameOfLife\Model\Species;
 
-class OrgamismFactory
+class OrganismFactory
 {
+
+    protected function __construct()
+    {
+        // Factory
+    }
+
     /**
-     * @param array $species
-     * @return Species[]
+     * @param array<int, array<string, mixed>> $species
      */
-    public static function create(array $species): array
+    public static function create(array $species): Organisms
     {
         $organism = [];
 
@@ -20,6 +26,7 @@ class OrgamismFactory
             $organism[] = new Species($entity['species'], $entity['pos_x'], $entity['pos_y']);
         }
 
-        return $organism;
+        return new Organisms($organism);
     }
+
 }
