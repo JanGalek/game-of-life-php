@@ -9,9 +9,11 @@ use Iterator;
 
 class Organisms implements Iterator, ArrayAccess
 {
+
     /** @var Species[] */
     protected array $items = [];
 
+    /** @var array<int|string, Species[]> */
     protected array $types = [];
 
     private int $index = 0;
@@ -74,18 +76,21 @@ class Organisms implements Iterator, ArrayAccess
 
     public function remove(Species $species): self
     {
-        $this->offsetUnset(array_search($species, $this->items));
+        $this->offsetUnset(array_search($species, $this->items, true));
 
         return new Organisms($this->items);
     }
 
     public function update(?Species $species): self
     {
-        $this->offsetSet(array_search($species, $this->items), $species);
+        $this->offsetSet(array_search($species, $this->items, true), $species);
 
         return new Organisms($this->items);
     }
 
+    /**
+     * @return Species[][]
+     */
     public function getTypes(): array
     {
         return $this->types;

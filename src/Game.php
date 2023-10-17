@@ -8,13 +8,19 @@ use GameOfLife\Model\Organisms;
 use GameOfLife\Model\Space\Position;
 use GameOfLife\Model\Species;
 use GameOfLife\Model\World;
+use GameOfLife\Services\RandomBorn;
 
 class Game
 {
 
     private World $world;
 
-    public function __construct(int $dimension, Organisms $organisms, private int $iterations)
+    public function __construct(
+        int $dimension,
+        Organisms $organisms,
+        private int $iterations,
+        private RandomBorn $randomBorn
+    )
     {
         $this->world = new World($dimension, $organisms);
     }
@@ -36,10 +42,10 @@ class Game
     public function next(): void
     {
         $listToDie = [];
-        $listToBorn = $this->listToBorn();
+        $listToBorn = $this->getPositionsToBorn();
 
-        foreach ($this->world->getSpace()->getPositions() as $x => $xPositions) {
-            foreach ($xPositions as $y => $position) {
+        foreach ($this->world->getSpace()->getPositions() as $xPositions) {
+            foreach ($xPositions as $position) {
                 if ($position->getSpecies() !== null) {
                     $listToDie = array_merge($this->getListToDie($position->getSpecies()), $listToDie);
                 }
@@ -50,7 +56,8 @@ class Game
             $this->world = $this->world->removeSpecies($species);
         }
 
-        foreach ($listToBorn as $species) {
+        foreach ($listToBorn as $position) {
+            $species = $position->getSpecies();
             $this->world = $this->world->updatePosition($species->getPositionX(), $species->getPositionY(), $species);
             $position = $this->world->getPosition($species->getPositionX(), $species->getPositionY());
             $position->updateSpecies($species);
@@ -58,37 +65,41 @@ class Game
     }
 
     /**
-     * @return Species[]
-     */
-    public function listToBorn(): array
-    {
-        $positionsToBorn = $this->getPositionsToBorn();
-        $toBorn = [];
-
-        foreach ($positionsToBorn as $type => $xPositions) {
-            foreach ($xPositions as $x => $positions) {
-                foreach ($positions as $y => $position) {
-                    $toBorn[] = new Species($type, $x, $y);
-                }
-            }
-        }
-
-        return $toBorn;
-    }
-
-    /**
-     * @return array<string|int, array<int, array<int, Position>>>
+     * @return Position[]
      */
     public function getPositionsToBorn(): array
     {
         /** @var array<string|int, array<int, array<int, Position>>> $positionsToBorn */
         $positionsToBorn = [];
+
+        $positions = [];
+
         foreach ($this->world->getOrganisms()->getArrayCopy() as $organism) {
             foreach ($organism->getNeighborsAvailableToBorn($this->world) as $position) {
                 $freeNeighbors = $position->getNeighborsToBorn($this->world);
 
-                if (isset($freeNeighbors[$organism->getType()]) && count($freeNeighbors[$organism->getType()]) === 3) {
-                    $positionsToBorn[$organism->getType()][$position->getX()][$position->getY()] = $position;
+                if (
+                    isset($freeNeighbors[$organism->getType()])
+                    && count($freeNeighbors[$organism->getType()]) === 3
+                ) {
+
+                    if (!isset($positions[$position->getX()][$position->getY()])) {
+                        $newPosition = new Position(
+                            $position->getX(),
+                            $position->getY(),
+                            new Species($organism->getType(), $position->getX(), $position->getY())
+                        );
+                        $positions[$position->getX()][$position->getY()] = $newPosition;
+                        $positionsToBorn[] = $newPosition;
+                    } elseif ($this->randomBorn->hasReplace()) {
+                        // @phpstan-ignore-next-line
+                        $key = array_search($positions[$position->getX()][$position->getY()], $positionsToBorn, false); // @phpstan-ignore function.strict
+                        $positionsToBorn[$key] = new Position(
+                            $position->getX(),
+                            $position->getY(),
+                            new Species($organism->getType(), $position->getX(), $position->getY())
+                        );
+                    }
                 }
             }
         }
@@ -130,6 +141,7 @@ class Game
     public function getSameSpeciesNeighbors(Species $species): array
     {
         $neighbors = $species->getSameTypeNeighbors($this->world);
+
         return array_values($neighbors);
     }
 
@@ -137,6 +149,7 @@ class Game
     public function getNeighbors(Species $species): array
     {
         $neighbors = $species->getNeighbors($this->world);
+
         return array_values($neighbors);
     }
 

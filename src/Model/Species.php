@@ -6,7 +6,7 @@ namespace GameOfLife\Model;
 
 use GameOfLife\Model\Space\Position;
 
-class Species
+readonly class Species
 {
 
     public function __construct(private string $type, private int $positionX, private int $positionY)
@@ -41,15 +41,15 @@ class Species
      */
     public function getSameTypeNeighbors(World $world): array
     {
-       $neighbors = $this->getNeighbors($world);
+        $neighbors = $this->getNeighbors($world);
 
-       foreach ($neighbors as $index => $position) {
-           if ($position->getSpecies() !== null && $position->getSpecies()->getType() !== $this->type) {
-               unset($neighbors[$index]);
-           }
-       }
+        foreach ($neighbors as $index => $position) {
+            if ($position->getSpecies() !== null && $position->getSpecies()->getType() !== $this->type) {
+                unset($neighbors[$index]);
+            }
+        }
 
-       return $neighbors;
+        return $neighbors;
     }
 
     /**
@@ -66,11 +66,6 @@ class Species
         }
 
         return array_values($neighbors);
-    }
-
-    public function isOnSamePosition(Species $species): bool
-    {
-        return $this->positionY === $species->getPositionY() && $this->positionX === $species->getPositionX();
     }
 
 }

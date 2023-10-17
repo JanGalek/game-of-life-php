@@ -3,6 +3,7 @@
     <!-- Rulesets -->
     <rule ref="./vendor/contributte/qa/ruleset-8.2.xml">
         <exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
+        <exclude name="SlevomatCodingStandard.Functions.StrictCall" />
     </rule>
     <config name="php_version" value="80200"/>
 

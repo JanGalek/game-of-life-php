@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace GameOfLife\Model\Space;
 
@@ -9,10 +9,9 @@ use ReturnTypeWillChange;
 
 class Space implements \Iterator
 {
-    /** @var array<int, array<int, Position>>  */
-    protected array $items = [];
 
-    protected array $types = [];
+    /** @var array<int, array<int, Position>> */
+    protected array $items = [];
 
     private int $indexX = 0;
 
@@ -40,6 +39,7 @@ class Space implements \Iterator
     public function offsetSet(int $x, int $y, ?Species $species): self
     {
         $this->items[$x][$y] = new Position($x, $y, $species);
+
         return $this;
     }
 
@@ -47,6 +47,7 @@ class Space implements \Iterator
     {
         $position = $this->items[$x][$y];
         $this->items[$x][$y] = $position->updateSpecies(null);
+
         //$this->items[$x][$y] = new Position($x, $y, null);
         return $this;
     }
@@ -60,6 +61,7 @@ class Space implements \Iterator
     {
         if (isset($this->items[$this->indexX + 1])) {
             $this->indexX++;
+
             return;
         }
 
@@ -68,9 +70,9 @@ class Space implements \Iterator
 
     #[ReturnTypeWillChange] public function key(): void
     {
-
         if (isset($this->items[$this->indexX + 1])) {
             $this->indexX++;
+
             return;
         }
 
@@ -95,4 +97,5 @@ class Space implements \Iterator
     {
         return $this->items;
     }
+
 }

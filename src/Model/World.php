@@ -26,6 +26,7 @@ class World
     public function getSpeciesByPosition(int $x, int $y): ?Species
     {
         $position = $this->getPosition($x, $y);
+
         return $position->getSpecies();
     }
 
@@ -33,6 +34,7 @@ class World
     {
         $this->space = $this->space->offsetUnset($species->getPositionX(), $species->getPositionY());
         $this->organisms = $this->organisms->remove($species);
+
         return $this;
     }
 
@@ -40,6 +42,7 @@ class World
     {
         $this->space = $this->space->offsetSet($x, $y, $species);
         $this->organisms = $this->organisms->update($species);
+
         return $this;
     }
 

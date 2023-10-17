@@ -6,7 +6,6 @@ namespace Tests;
 
 use GameOfLife\Factories\OrganismFactory;
 use GameOfLife\Model\Space\Position;
-use GameOfLife\Model\Space\Space;
 use GameOfLife\Model\Species;
 use GameOfLife\Model\World;
 use PHPUnit\Framework\TestCase;
@@ -15,11 +14,61 @@ class WorldTest extends TestCase
 {
 
     /**
+     * @return array<string, array<int, array<int, Position>>>
+     */
+    public static function provideSpaceData(): array
+    {
+        return [
+            'Init' => [
+                [
+                    [
+                        new Position(0, 0, null),
+                        new Position(0, 1, null),
+                        new Position(0, 2, null),
+                        new Position(0, 3, null),
+                        new Position(0, 4, null),
+                    ],
+                    [
+                        new Position(1, 0, null),
+                        new Position(1, 1, null),
+                        new Position(1, 2, null),
+                        new Position(1, 3, null),
+                        new Position(1, 4, null),
+                    ],
+                    [
+                        new Position(2, 0, null),
+                        new Position(2, 1, null),
+                        new Position(2, 2, null),
+                        new Position(2, 3, null),
+                        new Position(2, 4, null),
+                    ],
+                    [
+                        new Position(3, 0, null),
+                        new Position(3, 1, null),
+                        new Position(3, 2, null),
+                        new Position(3, 3, null),
+                        new Position(3, 4, null),
+                    ],
+                    [
+                        new Position(4, 0, null),
+                        new Position(4, 1, null),
+                        new Position(4, 2, null),
+                        new Position(4, 3, null),
+                        new Position(4, 4, null),
+                    ],
+                ],
+                5,
+            ],
+        ];
+    }
+
+    /**
      * @dataProvider provideSpaceData
+     * @param array<string, array<int, array<int, Position>>> $expected
      */
     public function testInitSpace(
-        $expected,
-        $dimension
+        array $expected,
+        int $dimension
     ): void
     {
         $organisms = OrganismFactory::create([]);
@@ -59,7 +108,7 @@ class WorldTest extends TestCase
                 new Position(2, 1, new Species('Human', 2, 1)),
                 new Position(2, 2, new Species('Human', 2, 2)),
                 new Position(2, 3, new Species('Human', 2, 3)),
-                new Position(2, 4,null),
+                new Position(2, 4, null),
             ],
             [
                 new Position(3, 0, null),
@@ -112,7 +161,7 @@ class WorldTest extends TestCase
                 new Position(2, 1, new Species('Human', 2, 1)),
                 new Position(2, 2, null),
                 new Position(2, 3, new Species('Human', 2, 3)),
-                new Position(2, 4,null),
+                new Position(2, 4, null),
             ],
             [
                 new Position(3, 0, null),
@@ -144,52 +193,6 @@ class WorldTest extends TestCase
         ];
         $organisms = OrganismFactory::create($species);
         new World(5, $organisms);
-    }
-
-    public static function provideSpaceData(): array
-    {
-        return [
-            'Init' => [
-                [
-                    [
-                        new Position(0, 0, null),
-                        new Position(0, 1, null),
-                        new Position(0, 2, null),
-                        new Position(0, 3, null),
-                        new Position(0, 4, null),
-                    ],
-                    [
-                        new Position(1, 0, null),
-                        new Position(1, 1, null),
-                        new Position(1, 2, null),
-                        new Position(1, 3, null),
-                        new Position(1, 4, null),
-                    ],
-                    [
-                        new Position(2, 0, null),
-                        new Position(2, 1, null),
-                        new Position(2, 2, null),
-                        new Position(2, 3, null),
-                        new Position(2, 4, null),
-                    ],
-                    [
-                        new Position(3, 0, null),
-                        new Position(3, 1, null),
-                        new Position(3, 2, null),
-                        new Position(3, 3, null),
-                        new Position(3, 4, null),
-                    ],
-                    [
-                        new Position(4, 0, null),
-                        new Position(4, 1, null),
-                        new Position(4, 2, null),
-                        new Position(4, 3, null),
-                        new Position(4, 4, null),
-                    ],
-                ],
-                5
-            ],
-        ];
     }
 
 }

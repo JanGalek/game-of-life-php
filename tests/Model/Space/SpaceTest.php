@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Tests\Model\Space;
 
@@ -10,19 +10,20 @@ use PHPUnit\Framework\TestCase;
 
 class SpaceTest extends TestCase
 {
-    public function testConstruct()
+
+    public function testConstruct(): void
     {
         $space = new Space(1);
         $expected = [
             0 => [
-                0 => new Position(0, 0, null)
-            ]
+                0 => new Position(0, 0, null),
+            ],
         ];
 
         $this->assertEquals($expected, $space->getPositions());
     }
 
-    public function testConstruct5()
+    public function testConstruct5(): void
     {
         $space = new Space(5);
         $expected = [
@@ -65,4 +66,5 @@ class SpaceTest extends TestCase
 
         $this->assertEquals($expected, $space->getPositions());
     }
+
 }

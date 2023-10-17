@@ -8,78 +8,16 @@ use GameOfLife\Factories\OrganismFactory;
 use GameOfLife\Game;
 use GameOfLife\Model\Space\Position;
 use GameOfLife\Model\Species;
+use GameOfLife\Services\RandomBorn;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class GameTest extends TestCase
 {
 
     /**
-     * @dataProvider provideBorning
+     * @return array<string, array<int, mixed>>
      */
-    public function testBorning(array $species, int $dimension, array $expected): void
-    {
-        $organisms = OrganismFactory::create($species);
-        $game = new Game($dimension, $organisms, 2);
-        //$game->listToBorn();
-
-        self::assertEquals($expected, $game->listToBorn());
-        //self::assertEquals($expected, $game->getWorld()->getSpace()->getPositions());
-    }
-
-    /**
-     * @dataProvider provideListToDie
-     */
-    public function testListToDie(array $species, Species $speciesToTest, int $dimension, array $expected): void
-    {
-        $organisms = OrganismFactory::create($species);
-        $game = new Game($dimension, $organisms, 2);
-
-        self::assertEquals($expected, $game->getListToDie($speciesToTest));
-    }
-
-    /**
-     * @dataProvider provideBorningPositions
-     */
-    public function testPositionsToBorn(array $species, int $dimension, array $expected): void
-    {
-        $organisms = OrganismFactory::create($species);
-        $game = new Game($dimension, $organisms, 2);
-
-        self::assertEquals($expected, $game->getPositionsToBorn());
-    }
-
-    /**
-     * @dataProvider provideSameSpeciesNeighbors
-     */
-    public function testGetSameSpeciesNeighbors($dimension, Species $testSpecies, array $species, $expected): void
-    {
-        $organisms = OrganismFactory::create($species);
-        $game = new Game($dimension, $organisms, 2);
-        self::assertEquals($expected, $game->getSameSpeciesNeighbors($testSpecies));
-    }
-
-    /**
-     * @dataProvider provideHumanNeighbors
-     */
-    public function testGetNeighbors($dimension, Species $testSpecies, array $species, $expected): void
-    {
-        $organisms = OrganismFactory::create($species);
-        $game = new Game($dimension, $organisms, 2);
-        self::assertEquals($expected, $game->getNeighbors($testSpecies));
-    }
-
-    /**
-     * @dataProvider provideNext
-     */
-    public function testPlay($dimension, int $iterations, array $species, $expected): void
-    {
-        $organisms = OrganismFactory::create($species);
-        $game = new Game($dimension, $organisms, $iterations);
-        $game->play();
-
-        self::assertEquals($expected, $game->getWorld()->getSpace()->getPositions());
-    }
-
     public static function provideListToDie(): array
     {
         return [
@@ -95,7 +33,7 @@ class GameTest extends TestCase
                 ],
                 new Species('Human', 0, 2),
                 5,
-                []
+                [],
             ],
             'Kill 1' => [
                 [
@@ -112,7 +50,7 @@ class GameTest extends TestCase
                 5,
                 [
                     new Species('Human', 2, 1),
-                ]
+                ],
             ],
             'Kill test' => [
                 [
@@ -126,67 +64,14 @@ class GameTest extends TestCase
                 5,
                 [
                     new Species('Human', 1, 1),
-                ]
+                ],
             ],
         ];
     }
 
-    public static function provideBorning(): array
-    {
-        return [
-            'Born 1 Only Human' => [
-                [
-                    ['species' => 'Human', 'pos_x' => 1, 'pos_y' => 1],
-                    ['species' => 'Human', 'pos_x' => 1, 'pos_y' => 2],
-                    ['species' => 'Human', 'pos_x' => 1, 'pos_y' => 3],
-                    ['species' => 'Human', 'pos_x' => 2, 'pos_y' => 3],
-                    ['species' => 'Human', 'pos_x' => 3, 'pos_y' => 1],
-                    ['species' => 'Human', 'pos_x' => 3, 'pos_y' => 2],
-                    ['species' => 'Human', 'pos_x' => 3, 'pos_y' => 3],
-                ],
-                5,
-                [
-                    new Species('Human', 0, 2),
-                    new Species('Human', 2, 4),
-                    new Species('Human', 4, 2),
-                ]
-            ],
-            'Borning 1 Cat and 1 Human' => [
-                [
-                    ['species' => 'Human', 'pos_x' => 1, 'pos_y' => 1],
-                    ['species' => 'Human', 'pos_x' => 3, 'pos_y' => 1],
-                    ['species' => 'Human', 'pos_x' => 1, 'pos_y' => 2],
-                    ['species' => 'Human', 'pos_x' => 3, 'pos_y' => 2],
-                    ['species' => 'Human', 'pos_x' => 2, 'pos_y' => 3],
-                    ['species' => 'Human', 'pos_x' => 3, 'pos_y' => 3],
-                    ['species' => 'Cat', 'pos_x' => 0, 'pos_y' => 3],
-                    ['species' => 'Cat', 'pos_x' => 0, 'pos_y' => 4],
-                    ['species' => 'Cat', 'pos_x' => 1, 'pos_y' => 3],
-                ],
-                5,
-                [
-                    new Species('Human', 4, 2),
-                    new Species('Cat', 1, 4),
-                ]
-            ],
-            'Borning 1 colision Cat and Human' => [
-                [
-                    ['species' => 'Human', 'pos_x' => 1, 'pos_y' => 1],
-                    ['species' => 'Human', 'pos_x' => 2, 'pos_y' => 1],
-                    ['species' => 'Human', 'pos_x' => 1, 'pos_y' => 2],
-                    ['species' => 'Cat', 'pos_x' => 2, 'pos_y' => 3],
-                    ['species' => 'Cat', 'pos_x' => 3, 'pos_y' => 2],
-                    ['species' => 'Cat', 'pos_x' => 3, 'pos_y' => 3],
-                ],
-                5,
-                [
-                    new Species('Human', 2, 2),
-                    new Species('Cat', 2, 2),
-                ]
-            ],
-        ];
-    }
-
+    /**
+     * @return array<string, array<int, mixed>>
+     */
     public static function provideBorningPositions(): array
     {
         return [
@@ -200,13 +85,10 @@ class GameTest extends TestCase
                     ['species' => 'Human', 'pos_x' => 3, 'pos_y' => 3],
                 ],
                 5,
+                true,
                 [
-                    'Human' => [
-                        4 => [
-                            2 => new Position(4, 2, null),
-                        ],
-                    ],
-                ]
+                    new Position(4, 2, new Species('Human', 4, 2)),
+                ],
             ],
             'Borning 1 Cat and 1 Human' => [
                 [
@@ -221,18 +103,11 @@ class GameTest extends TestCase
                     ['species' => 'Cat', 'pos_x' => 1, 'pos_y' => 3],
                 ],
                 5,
+                true,
                 [
-                    'Human' => [
-                        4 => [
-                            2 => new Position(4, 2, null),
-                        ],
-                    ],
-                    'Cat' => [
-                        1 => [
-                            4 => new Position(1, 4, null),
-                        ],
-                    ],
-                ]
+                    new Position(4, 2, new Species('Human', 4, 2)),
+                    new Position(1, 4, new Species('Cat', 1, 4)),
+                ],
             ],
             'Borning 1 colision Cat and Human' => [
                 [
@@ -244,22 +119,32 @@ class GameTest extends TestCase
                     ['species' => 'Cat', 'pos_x' => 3, 'pos_y' => 3],
                 ],
                 5,
+                true,
                 [
-                    'Human' => [
-                        2 => [
-                            2 => new Position(2, 2, null),
-                        ],
-                    ],
-                    'Cat' => [
-                        2 => [
-                            2 => new Position(2, 2, null),
-                        ],
-                    ],
-                ]
+                    new Position(2, 2, new Species('Cat', 2, 2)),
+                ],
+            ],
+            'Borning 1 colision Cat and Human choose Human' => [
+                [
+                    ['species' => 'Human', 'pos_x' => 1, 'pos_y' => 1],
+                    ['species' => 'Human', 'pos_x' => 2, 'pos_y' => 1],
+                    ['species' => 'Human', 'pos_x' => 1, 'pos_y' => 2],
+                    ['species' => 'Cat', 'pos_x' => 2, 'pos_y' => 3],
+                    ['species' => 'Cat', 'pos_x' => 3, 'pos_y' => 2],
+                    ['species' => 'Cat', 'pos_x' => 3, 'pos_y' => 3],
+                ],
+                5,
+                false,
+                [
+                    new Position(2, 2, new Species('Human', 2, 2)),
+                ],
             ],
         ];
     }
 
+    /**
+     * @return array<string, array<int, mixed>>
+     */
     public static function provideNext(): array
     {
         return [
@@ -422,11 +307,14 @@ class GameTest extends TestCase
                         new Position(4, 3, null),
                         new Position(4, 4, null),
                     ],
-                ]
+                ],
             ],
         ];
     }
 
+    /**
+     * @return array<string, array<int, mixed>>
+     */
     public static function provideSameSpeciesNeighbors(): array
     {
         return [
@@ -476,6 +364,9 @@ class GameTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<string, array<int, mixed>>
+     */
     public static function provideHumanNeighbors(): array
     {
         return [
@@ -611,6 +502,80 @@ class GameTest extends TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * @dataProvider provideListToDie
+     * @param array<string, mixed> $species
+     * @param Species[] $expected
+     */
+    public function testListToDie(array $species, Species $speciesToTest, int $dimension, array $expected): void
+    {
+        $randomBorn = Mockery::mock(RandomBorn::class);
+        $randomBorn->shouldReceive('hasReplace')->andReturn(true);
+        $organisms = OrganismFactory::create($species);
+        $game = new Game($dimension, $organisms, 2, $randomBorn);
+
+        self::assertEquals($expected, $game->getListToDie($speciesToTest));
+    }
+
+    /**
+     * @dataProvider provideBorningPositions
+     * @param array<string, mixed> $species
+     * @param Position[] $expected
+     */
+    public function testPositionsToBorn(array $species, int $dimension, bool $hasReplace, array $expected): void
+    {
+        $randomBorn = Mockery::mock(RandomBorn::class);
+        $randomBorn->shouldReceive('hasReplace')->andReturn($hasReplace);
+        $organisms = OrganismFactory::create($species);
+        $game = new Game($dimension, $organisms, 2, $randomBorn);
+
+        self::assertEquals($expected, $game->getPositionsToBorn());
+    }
+
+    /**
+     * @dataProvider provideSameSpeciesNeighbors
+     * @param array<string, mixed> $species
+     * @param Position[] $expected
+     */
+    public function testGetSameSpeciesNeighbors(int $dimension, Species $testSpecies, array $species, array $expected): void
+    {
+        $randomBorn = Mockery::mock(RandomBorn::class);
+        $randomBorn->shouldReceive('hasReplace')->andReturn(true);
+        $organisms = OrganismFactory::create($species);
+        $game = new Game($dimension, $organisms, 2, $randomBorn);
+        self::assertEquals($expected, $game->getSameSpeciesNeighbors($testSpecies));
+    }
+
+    /**
+     * @dataProvider provideHumanNeighbors
+     * @param array<string, mixed> $species
+     * @param Position[] $expected
+     */
+    public function testGetNeighbors(int $dimension, Species $testSpecies, array $species, array $expected): void
+    {
+        $randomBorn = Mockery::mock(RandomBorn::class);
+        $randomBorn->shouldReceive('hasReplace')->andReturn(true);
+        $organisms = OrganismFactory::create($species);
+        $game = new Game($dimension, $organisms, 2, $randomBorn);
+        self::assertEquals($expected, $game->getNeighbors($testSpecies));
+    }
+
+    /**
+     * @dataProvider provideNext
+     * @param array<string, mixed> $species
+     * @param Position[] $expected
+     */
+    public function testPlay(int $dimension, int $iterations, array $species, array $expected): void
+    {
+        $randomBorn = Mockery::mock(RandomBorn::class);
+        $randomBorn->shouldReceive('hasReplace')->andReturn(true);
+        $organisms = OrganismFactory::create($species);
+        $game = new Game($dimension, $organisms, $iterations, $randomBorn);
+        $game->play();
+
+        self::assertEquals($expected, $game->getWorld()->getSpace()->getPositions());
     }
 
 }
