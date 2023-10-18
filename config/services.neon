@@ -1,9 +1,15 @@
 services:
 	- App\Router\RouterFactory::createRouter
+	- GameOfLife\Commands\PlayCommand
 
 
 search:
 	-	in: %appDir%
+		classes:
+			- *Factory
+			- *Facade
+
+	-	in: %appDir%/../src
 		classes:
 			- *Factory
 			- *Facade

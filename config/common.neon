@@ -19,3 +19,9 @@ di:
 	export:
 		parameters: no
 		tags: no
+
+extensions:
+    console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+
+console:
+    lazy: true
