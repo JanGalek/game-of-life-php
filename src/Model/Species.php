@@ -5,8 +5,9 @@ declare(strict_types = 1);
 namespace GameOfLife\Model;
 
 use GameOfLife\Model\Space\Position;
+use JsonSerializable;
 
-readonly class Species
+readonly class Species implements JsonSerializable
 {
 
     public function __construct(private string $type, private int $positionX, private int $positionY)
@@ -68,4 +69,12 @@ readonly class Species
         return array_values($neighbors);
     }
 
+    public function jsonSerialize(): array
+    {
+        return [
+            'pos_x' => $this->positionX,
+            'pos_y' => $this->positionY,
+            'species' => $this->type,
+        ];
+    }
 }

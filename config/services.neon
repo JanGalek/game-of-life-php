@@ -1,6 +1,7 @@
 services:
 	- App\Router\RouterFactory::createRouter
 	- GameOfLife\Commands\PlayCommand
+	- GameOfLife\Services\Configuration\Loaders\JsonLoader
 
 
 search:

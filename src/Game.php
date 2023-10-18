@@ -9,8 +9,9 @@ use GameOfLife\Model\Space\Position;
 use GameOfLife\Model\Species;
 use GameOfLife\Model\World;
 use GameOfLife\Services\RandomBorn;
+use JsonSerializable;
 
-class Game
+class Game implements JsonSerializable
 {
 
     private World $world;
@@ -153,4 +154,17 @@ class Game
         return array_values($neighbors);
     }
 
+    public function jsonSerialize(): array
+    {
+        $organisms = $this->getWorld()->getOrganisms();
+        $speciesCount = count($organisms->getTypes());
+        return [
+            "world" => [
+                "dimension" => $this->getWorld()->getDimension(),
+                "speciesCount" => $speciesCount,
+                "iterationsCount" => $this->iterations,
+            ],
+            "organisms" => $this->getWorld()->getOrganisms()
+        ];
+    }
 }

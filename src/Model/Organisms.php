@@ -6,8 +6,9 @@ namespace GameOfLife\Model;
 
 use ArrayAccess;
 use Iterator;
+use JsonSerializable;
 
-class Organisms implements Iterator, ArrayAccess
+class Organisms implements Iterator, ArrayAccess, JsonSerializable
 {
 
     /** @var Species[] */
@@ -104,4 +105,8 @@ class Organisms implements Iterator, ArrayAccess
         return $this->items;
     }
 
+    public function jsonSerialize(): array
+    {
+        return $this->getArrayCopy();
+    }
 }

@@ -5,9 +5,11 @@ declare(strict_types = 1);
 namespace GameOfLife\Model\Space;
 
 use GameOfLife\Model\Species;
+use Iterator;
+use JsonSerializable;
 use ReturnTypeWillChange;
 
-class Space implements \Iterator
+class Space implements Iterator, JsonSerializable
 {
 
     /** @var array<int, array<int, Position>> */
@@ -98,4 +100,8 @@ class Space implements \Iterator
         return $this->items;
     }
 
+    public function jsonSerialize(): array
+    {
+        return $this->items;
+    }
 }

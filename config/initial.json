@@ -1,18 +1,48 @@
 {
   "world": {
-    "dimension": 40,
+    "dimension": 5,
     "speciesCount": 1,
     "iterationsCount": 2
   },
   "organisms": [
     {
-      "pos_x": 19,
-      "pos_y": 19,
+      "pos_x": 1,
+      "pos_y": 1,
       "species": "Human"
     },
     {
-      "pos_x": 20,
-      "pos_y": 19,
+      "pos_x": 2,
+      "pos_y": 1,
+      "species": "Human"
+    },
+    {
+      "pos_x": 3,
+      "pos_y": 1,
+      "species": "Human"
+    },
+    {
+      "pos_x": 1,
+      "pos_y": 2,
+      "species": "Human"
+    },
+    {
+      "pos_x": 3,
+      "pos_y": 2,
+      "species": "Human"
+    },
+    {
+      "pos_x": 1,
+      "pos_y": 3,
+      "species": "Human"
+    },
+    {
+      "pos_x": 2,
+      "pos_y": 3,
+      "species": "Human"
+    },
+    {
+      "pos_x": 3,
+      "pos_y": 3,
       "species": "Human"
     }
   ]

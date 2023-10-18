@@ -6,8 +6,9 @@ namespace GameOfLife\Model\Space;
 
 use GameOfLife\Model\Species;
 use GameOfLife\Model\World;
+use JsonSerializable;
 
-class Position
+class Position implements JsonSerializable
 {
 
     public function __construct(
@@ -124,4 +125,12 @@ class Position
         return $neighbors;
     }
 
+    public function jsonSerialize(): array
+    {
+        return [
+            'pos_x' => $this->x,
+            'pos_y' => $this->y,
+            'organism' => $this->species,
+        ];
+    }
 }
