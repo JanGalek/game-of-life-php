@@ -77,4 +77,5 @@ readonly class Species implements JsonSerializable
             'species' => $this->type,
         ];
     }
+
 }

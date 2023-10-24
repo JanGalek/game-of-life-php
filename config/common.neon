@@ -22,6 +22,7 @@ di:
 
 extensions:
     console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+    validator: Contributte\Validator\DI\ValidatorExtension
 
 console:
     lazy: true

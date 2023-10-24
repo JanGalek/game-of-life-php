@@ -19,8 +19,8 @@ class Game implements JsonSerializable
     public function __construct(
         int $dimension,
         Organisms $organisms,
-        private int $iterations,
-        private RandomBorn $randomBorn
+        private readonly int $iterations,
+        private readonly RandomBorn $randomBorn
     )
     {
         $this->world = new World($dimension, $organisms);
@@ -158,13 +158,20 @@ class Game implements JsonSerializable
     {
         $organisms = $this->getWorld()->getOrganisms();
         $speciesCount = count($organisms->getTypes());
+
         return [
-            "world" => [
-                "dimension" => $this->getWorld()->getDimension(),
-                "speciesCount" => $speciesCount,
-                "iterationsCount" => $this->iterations,
+            'world' => [
+                'dimension' => $this->getWorld()->getDimension(),
+                'speciesCount' => $speciesCount,
+                'iterationsCount' => $this->iterations,
             ],
-            "organisms" => $this->getWorld()->getOrganisms()
+            'organisms' => $this->getWorld()->getOrganisms(),
         ];
     }
+
+    public function getIterations(): int
+    {
+        return $this->iterations;
+    }
+
 }

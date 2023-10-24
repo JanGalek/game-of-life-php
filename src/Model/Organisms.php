@@ -109,4 +109,5 @@ class Organisms implements Iterator, ArrayAccess, JsonSerializable
     {
         return $this->getArrayCopy();
     }
+
 }

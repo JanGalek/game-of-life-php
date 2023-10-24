@@ -7,13 +7,14 @@ namespace GameOfLife\Model\Space;
 use GameOfLife\Model\Species;
 use GameOfLife\Model\World;
 use JsonSerializable;
+use Stringable;
 
-class Position implements JsonSerializable
+class Position implements JsonSerializable, Stringable
 {
 
     public function __construct(
-        private int $x,
-        private int $y,
+        private readonly int $x,
+        private readonly int $y,
         private ?Species $species = null
     )
     {
@@ -109,22 +110,6 @@ class Position implements JsonSerializable
         return $neighbors2;
     }
 
-    /**
-     * @return Position[]
-     */
-    public function getFreeNeighbors(World $world): array
-    {
-        $neighbors = $this->getNeighbors($world);
-
-        foreach ($neighbors as $index => $position) {
-            if ($position->getSpecies() !== null) {
-                unset($neighbors[$index]);
-            }
-        }
-
-        return $neighbors;
-    }
-
     public function jsonSerialize(): array
     {
         return [
@@ -133,4 +118,10 @@ class Position implements JsonSerializable
             'organism' => $this->species,
         ];
     }
+
+    public function __toString(): string
+    {
+        return $this->species === null ? ' ' : $this->species->getType();
+    }
+
 }

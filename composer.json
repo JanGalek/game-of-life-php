@@ -19,7 +19,8 @@
 		"nette/utils": "^4.0",
 		"latte/latte": "^3.0",
 		"tracy/tracy": "^2.9",
-		"contributte/console": "^0.9.3"
+		"contributte/console": "^0.9.3",
+		"contributte/validator": "^1.1"
 	},
 	"require-dev": {
 		"symfony/thanks": "^1",

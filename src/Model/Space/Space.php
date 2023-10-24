@@ -50,11 +50,10 @@ class Space implements Iterator, JsonSerializable
         $position = $this->items[$x][$y];
         $this->items[$x][$y] = $position->updateSpecies(null);
 
-        //$this->items[$x][$y] = new Position($x, $y, null);
         return $this;
     }
 
-    public function current(): mixed
+    public function current(): Position
     {
         return $this->items[$this->indexX][$this->indexY];
     }
@@ -104,4 +103,5 @@ class Space implements Iterator, JsonSerializable
     {
         return $this->items;
     }
+
 }

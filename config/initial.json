@@ -2,7 +2,7 @@
   "world": {
     "dimension": 5,
     "speciesCount": 1,
-    "iterationsCount": 2
+    "iterationsCount": 10
   },
   "organisms": [
     {
